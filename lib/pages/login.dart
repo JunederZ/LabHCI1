@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:labhci1/pages/home.dart';
 import 'package:labhci1/pages/register.dart';
 import 'package:labhci1/services/auth_service.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -16,8 +21,21 @@ class _LoginPageState extends State<LoginPage> {
   late String? udid;
   late SharedPreferences prefs;
 
-  void _login(password) {
-    AuthService.login(udid, password!);
+  void _login(password) async {
+    String res = await AuthService.login(udid, password!);
+    Map resJson = jsonDecode(res);
+    if (resJson['msg'] == "password salah") {
+      Fluttertoast.showToast(
+        msg: "Incorrect password",
+        // backgroundColor: Color.fromARGB(255, 53, 4, 0),
+        // textColor: Color.fromARGB(255, 238, 185, 183),
+        backgroundColor: Color.fromARGB(255, 215, 160, 155),
+        textColor: Color.fromARGB(255, 59, 4, 2),
+        timeInSecForIosWeb: 3,
+      );
+    } else if (resJson['msg'] == 'success') {
+      Get.off(const HomePage());
+    }
   }
 
   void getUDID() async {
@@ -38,13 +56,14 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text('Login'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextFormField(
               obscureText: true,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+                // border: OutlineInputBorder(),
+                border: UnderlineInputBorder(),
                 labelText: 'Password',
               ),
               controller: passwordController,

@@ -79,8 +79,6 @@ class AuthService {
     Encrypted encryptedMsg =
         Encrypted.from64(ascii.decode(base64Decode(response.body)));
     String decryptedResponse = encrypter.decrypt(encryptedMsg);
-
-    print(decryptedResponse);
     return decryptedResponse;
   }
 }

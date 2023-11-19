@@ -93,6 +93,7 @@ class _CustomFormState extends State<CustomForm> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               Column(
                 children: [
                   ElevatedButton(

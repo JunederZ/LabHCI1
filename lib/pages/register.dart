@@ -30,6 +30,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Register"),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
