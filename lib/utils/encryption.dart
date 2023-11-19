@@ -59,3 +59,18 @@ Encrypter createFernetEncrypter(String username, String deviceID) {
   Encrypter encrypter = Encrypter(fernet);
   return encrypter;
 }
+
+String asymmetricEncrypt(String message, String key) {
+  RSAKeyParser keyParser = RSAKeyParser();
+  RSAAsymmetricKey publicKeyParser = keyParser.parse(key);
+
+  final publicKey =
+      RSAPublicKey(publicKeyParser.modulus!, publicKeyParser.exponent!);
+
+  Encrypter encrypter =
+      Encrypter(RSA(publicKey: publicKey, encoding: RSAEncoding.PKCS1));
+
+  Encrypted msg = encrypter.encrypt(message);
+
+  return msg.base64;
+}

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:labhci1/pages/register.dart';
-import 'package:labhci1/services/login_service.dart';
+import 'package:labhci1/services/auth_service.dart';
 import 'package:platform_device_id/platform_device_id.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,10 +14,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
   late String? udid;
+  late SharedPreferences prefs;
 
   void _login(password) {
-    AuthService authService = AuthService(password, udid!);
-    authService.login();
+    AuthService.login(udid, password!);
   }
 
   void getUDID() async {
