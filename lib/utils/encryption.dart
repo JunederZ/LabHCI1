@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/asymmetric/api.dart' as crypto;
+import 'package:crypto/crypto.dart';
 import 'package:pointycastle/export.dart';
 import 'package:http/http.dart' as http;
 
@@ -36,4 +37,12 @@ class EncryptRequest {
 
     return encryptedText;
   }
+}
+
+String hashing(String input, String salt) {
+  final combined = utf8.encode('$input$salt');
+  final hashedBytes = sha256.convert(combined);
+  final hashedPassword = hashedBytes.toString();
+
+  return hashedPassword;
 }
