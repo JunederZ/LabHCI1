@@ -1,10 +1,13 @@
 import 'package:android_id/android_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:labhci1/controllers/register_controller.dart';
 
 class CustomForm extends StatefulWidget {
-  const CustomForm({super.key});
+  final VoidCallback? onSubmit;
+
+  const CustomForm({Key? key, this.onSubmit}) : super(key: key);
 
   @override
   State<CustomForm> createState() => _CustomFormState();
@@ -15,7 +18,7 @@ class _CustomFormState extends State<CustomForm> {
   static const _androidIdPlugin = AndroidId();
   var _androidId = 'Unknown';
 
-  final RegisterController controller = RegisterController();
+  final RegisterController controller = Get.put(RegisterController());
 
   final _formKey = GlobalKey<FormState>();
 
@@ -41,7 +44,7 @@ class _CustomFormState extends State<CustomForm> {
 
   @override
   Widget build(BuildContext context) {
-    controller.deviceIdController.text = _androidId;
+    controller.updateDeviceId(_androidId);
     return Form(
       key: _formKey,
         child: Padding(
@@ -51,9 +54,7 @@ class _CustomFormState extends State<CustomForm> {
             children: [
               Visibility (
                 visible: false,
-                child: TextFormField(
-                  controller: controller.deviceIdController,
-                ),
+                child: TextFormField(),
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -63,9 +64,9 @@ class _CustomFormState extends State<CustomForm> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your full name';
                   }
+                  controller.updateFullname(value);
                   return null;
                 },
-                controller: controller.fullnameController,
               ),
               TextFormField(
                 decoration: const InputDecoration(
@@ -75,9 +76,9 @@ class _CustomFormState extends State<CustomForm> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your username';
                   }
+                  controller.updateUsername(value);
                   return null;
                 },
-                controller: controller.usernameController,
               ),
               TextFormField(
                 obscureText: true,
@@ -88,14 +89,14 @@ class _CustomFormState extends State<CustomForm> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your password';
                   }
+                  controller.updatePassword(value);
                   return null;
                 },
-                controller: controller.passwordController,
               ),
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      print(controller.deviceIdController.text);
+                      widget.onSubmit?.call();
                     }
                   },
                   child: const Text('Submit'))
