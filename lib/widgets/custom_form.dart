@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:labhci1/controllers/register_controller.dart';
+import 'package:labhci1/pages/login.dart';
 
 class CustomForm extends StatefulWidget {
   final VoidCallback? onSubmit;
@@ -14,7 +15,6 @@ class CustomForm extends StatefulWidget {
 }
 
 class _CustomFormState extends State<CustomForm> {
-
   static const _androidIdPlugin = AndroidId();
   var _androidId = 'Unknown';
 
@@ -46,13 +46,13 @@ class _CustomFormState extends State<CustomForm> {
   Widget build(BuildContext context) {
     controller.updateDeviceId(_androidId);
     return Form(
-      key: _formKey,
+        key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Visibility (
+              Visibility(
                 visible: false,
                 child: TextFormField(),
               ),
@@ -93,13 +93,27 @@ class _CustomFormState extends State<CustomForm> {
                   return null;
                 },
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      widget.onSubmit?.call();
-                    }
-                  },
-                  child: const Text('Submit'))
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        widget.onSubmit?.call();
+                      }
+                    },
+                    child: const Text('Submit'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                        return const LoginPage();
+                      }));
+                    },
+                    child: const Text('Login'),
+                  ),
+                ],
+              ),
             ],
           ),
         ));

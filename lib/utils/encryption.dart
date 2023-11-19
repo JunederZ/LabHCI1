@@ -23,6 +23,10 @@ class EncryptRequest {
     return response;
   }
 
+  String encrypt(String plaintext) {
+    return base64Encode(_encryptRSA(plaintext, publicKeyPem));
+  }
+
   void _parsePublicKeyFromPem(String pemString) {
     final parser = RSAKeyParser();
     publicKeyPem = parser.parse(pemString) as crypto.RSAPublicKey;
@@ -45,4 +49,13 @@ String hashing(String input, String salt) {
   final hashedPassword = hashedBytes.toString();
 
   return hashedPassword;
+}
+
+Encrypter createFernetEncrypter(String username, String deviceID) {
+  String key = username + deviceID;
+  var byte = sha256.convert(utf8.encode(key)).bytes;
+  final b64key = Key.fromBase64(base64Url.encode(byte));
+  Fernet fernet = Fernet(b64key);
+  Encrypter encrypter = Encrypter(fernet);
+  return encrypter;
 }
