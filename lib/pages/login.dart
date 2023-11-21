@@ -38,6 +38,20 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _unregist() async {
+    String res = await AuthService.unregist(udid);
+    if (res == "success") {
+      Fluttertoast.showToast(
+        msg: "Success unregister device",
+        // backgroundColor: Color.fromARGB(255, 53, 4, 0),
+        // textColor: Color.fromARGB(255, 238, 185, 183),
+        backgroundColor: const Color.fromARGB(255, 215, 160, 155),
+        textColor: const Color.fromARGB(255, 59, 4, 2),
+        timeInSecForIosWeb: 3,
+      );
+    }
+  }
+
   void getUDID() async {
     udid = await PlatformDeviceId.getDeviceId;
   }
@@ -54,6 +68,15 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Login'),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _unregist();
+        },
+        backgroundColor: Theme.of(context).colorScheme.onError,
+        foregroundColor: Theme.of(context).colorScheme.error,
+        icon: const Icon(Icons.phonelink_erase),
+        label: const Text("Unregist Device"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

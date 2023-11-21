@@ -92,4 +92,27 @@ class AuthService {
     String decryptedResponse = encrypter.decrypt(encryptedMsg);
     return decryptedResponse;
   }
+
+  static Future<String> unregist(udid) async {
+    // get public key to working
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var url = Uri(
+      scheme: 'http',
+      host: "103.134.154.22",
+      port: 5000,
+      path: '/unregist',
+    );
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+    Map<String, String> body = {
+      "udid": udid,
+    };
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(body),
+    );
+    return response.body;
+  }
 }
