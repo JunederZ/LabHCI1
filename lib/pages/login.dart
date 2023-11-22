@@ -18,19 +18,25 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
-  late String? udid;
-  late SharedPreferences prefs;
 
   void _login(password) async {
+    String? udid = await PlatformDeviceId.getDeviceId;
     String res = await AuthService.login(udid, password!);
+    if (res == 'not registered') {
+      Fluttertoast.showToast(
+        msg: "Device isn't registered",
+        backgroundColor: const Color.fromARGB(255, 215, 160, 155),
+        textColor: const Color.fromARGB(255, 59, 4, 2),
+        timeInSecForIosWeb: 3,
+      );
+      return;
+    }
     Map resJson = jsonDecode(res);
     if (resJson['msg'] == "password salah") {
       Fluttertoast.showToast(
         msg: "Incorrect password",
-        // backgroundColor: Color.fromARGB(255, 53, 4, 0),
-        // textColor: Color.fromARGB(255, 238, 185, 183),
-        backgroundColor: Color.fromARGB(255, 215, 160, 155),
-        textColor: Color.fromARGB(255, 59, 4, 2),
+        backgroundColor: const Color.fromARGB(255, 215, 160, 155),
+        textColor: const Color.fromARGB(255, 59, 4, 2),
         timeInSecForIosWeb: 3,
       );
     } else if (resJson['msg'] == 'success') {
@@ -38,13 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void getUDID() async {
-    udid = await PlatformDeviceId.getDeviceId;
-  }
-
   @override
   void initState() {
-    getUDID();
     super.initState();
   }
 
@@ -60,6 +61,12 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your password';
+                }
+                return null;
+              },
               obscureText: true,
               decoration: const InputDecoration(
                 // border: OutlineInputBorder(),

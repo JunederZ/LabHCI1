@@ -43,7 +43,10 @@ dependencies:
   crypto: ^3.0.3
   http: ^1.1.0
   shared_preferences: ^2.2.2
-  platform_device_id: ^1.0.1
+  # platform_device_id: ^1.0.1
+  platform_device_id: 
+    path: plugin/platform_device_id
+
   fluttertoast: ^8.2.4
 
 dev_dependencies:

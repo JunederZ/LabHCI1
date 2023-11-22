@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:labhci1/controllers/register_controller.dart';
 import 'package:labhci1/services/auth_service.dart';
 import 'package:labhci1/widgets/custom_form.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -20,10 +21,10 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
     controller = Get.put(RegisterController());
-    initSharedPrefs();
+    initAsync();
   }
 
-  void initSharedPrefs() async {
+  void initAsync() async {
     prefs = await SharedPreferences.getInstance();
   }
 
@@ -48,6 +49,10 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: const FloatingActionButton(
+        onPressed: AuthService.reset,
+        child: Icon(Icons.dangerous_outlined),
       ),
     );
   }

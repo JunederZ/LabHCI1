@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       headers: headers,
       body: encryptedBody,
     );
-    Encrypter encrypter = createFernetEncrypter(udid!, "");
+    Encrypter encrypter = createFernetEncrypter(udid, "");
     Encrypted encryptedMsg =
         Encrypted.from64(ascii.decode(base64Decode(response.body)));
     String decryptedResponse = encrypter.decrypt(encryptedMsg);
