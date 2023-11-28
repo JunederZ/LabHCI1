@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:labhci1/controllers/register_controller.dart';
+// import 'package:labhci1/controllers/register_controller.dart';
+import 'package:labhci1/controllers/register_controller_v2.dart';
 import 'package:labhci1/services/auth_service.dart';
 import 'package:labhci1/widgets/custom_form.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -20,7 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    controller = Get.put(RegisterController());
+    // controller = Get.put(RegisterController());
+    controller = RegisterController();
     initAsync();
   }
 
@@ -41,10 +43,15 @@ class _RegisterPageState extends State<RegisterPage> {
           Center(
             child: CustomForm(
               onSubmit: () => AuthService.register(
-                controller.deviceId.value,
-                controller.fullname.value,
-                controller.username.value,
-                controller.password.value,
+                // controller.deviceId.value,
+                RegisterController.deviceId,
+                // controller.fullname.value,
+                RegisterController.fullname,
+                // controller.username.value,
+                RegisterController.username,
+                // controller.password.value,
+                RegisterController.password,
+                RegisterController.email,
               ),
             ),
           ),

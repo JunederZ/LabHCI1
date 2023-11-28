@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:labhci1/pages/home.dart';
-import 'package:labhci1/pages/register.dart';
+
+import 'package:labhci1/controllers/register_controller_v2.dart';
 import 'package:labhci1/services/auth_service.dart';
+import 'package:labhci1/routes/routes.dart';
 import 'package:platform_device_id/platform_device_id.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
         timeInSecForIosWeb: 3,
       );
     } else if (resJson['msg'] == 'success') {
-      Get.off(const HomePage());
+      Routes().goToPush("/Home");
     }
   }
 
@@ -61,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
@@ -96,12 +99,7 @@ class _LoginPageState extends State<LoginPage> {
               child: const Text('Login'),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pushReplacement(MaterialPageRoute(builder: (context) {
-                  return const RegisterPage();
-                }));
-              },
+              onPressed: () => Routes().goToPush("/Register"),
               child: const Text('Register'),
             ),
           ]),

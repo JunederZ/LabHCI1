@@ -2,7 +2,10 @@ import 'package:android_id/android_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:labhci1/controllers/register_controller.dart';
+// import 'package:labhci1/controllers/register_controller.dart';
+import 'package:labhci1/controllers/register_controller_v2.dart';
+import 'package:labhci1/routes/routes.dart';
+import 'package:labhci1/validators/register_validators.dart';
 import 'package:labhci1/pages/login.dart';
 
 class CustomForm extends StatefulWidget {
@@ -18,7 +21,9 @@ class _CustomFormState extends State<CustomForm> {
   static const _androidIdPlugin = AndroidId();
   var _androidId = 'Unknown';
 
-  final RegisterController controller = Get.put(RegisterController());
+  // final RegisterController controller = Get.put(RegisterController());
+  final RegisterController controller = const RegisterController();
+  final RegisterValidator validator = RegisterValidator();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -26,6 +31,15 @@ class _CustomFormState extends State<CustomForm> {
   void initState() {
     super.initState();
     _initAndroidId();
+    controller.resetData();
+  }
+
+  @override
+  @protected
+  @mustCallSuper
+  void dispose() {
+    super.dispose();
+    controller.resetData();
   }
 
   Future<void> _initAndroidId() async {
@@ -40,11 +54,13 @@ class _CustomFormState extends State<CustomForm> {
     if (!mounted) return;
 
     setState(() => _androidId = androidId);
+
+    controller.updateDeviceId(_androidId);
   }
 
   @override
   Widget build(BuildContext context) {
-    controller.updateDeviceId(_androidId);
+
     return Form(
         key: _formKey,
         child: Padding(
@@ -60,38 +76,30 @@ class _CustomFormState extends State<CustomForm> {
                 decoration: const InputDecoration(
                   label: Text('Full Name'),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your full name';
-                  }
-                  controller.updateFullname(value);
-                  return null;
-                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: validator.fullnameValidator,
               ),
               TextFormField(
                 decoration: const InputDecoration(
                   label: Text('Username'),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  controller.updateUsername(value);
-                  return null;
-                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: validator.usernameValidator,
               ),
               TextFormField(
                 obscureText: true,
                 decoration: const InputDecoration(
                   label: Text('Password'),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  controller.updatePassword(value);
-                  return null;
-                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: validator.passwordValidator,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(
+                  label: Text('Email'),
+                ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: validator.emailValidator,
               ),
               const SizedBox(height: 20),
               Column(
@@ -105,12 +113,7 @@ class _CustomFormState extends State<CustomForm> {
                     child: const Text('Submit'),
                   ),
                   TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) {
-                        return const LoginPage();
-                      }));
-                    },
+                    onPressed: () => Routes().goToPush("/Login"),
                     child: const Text('Login'),
                   ),
                 ],

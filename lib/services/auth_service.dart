@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:labhci1/pages/login.dart';
 import 'package:labhci1/utils/encryption.dart';
+import 'package:labhci1/routes/routes.dart';
+import 'package:labhci1/controllers/register_controller_v2.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,8 +37,9 @@ class AuthService {
     );
   }
 
-  static Future register(deviceId, fullName, username, password) async {
+  static Future register(deviceId, fullName, username, password, email) async {
     String? udid = await PlatformDeviceId.getDeviceId;
+    print("${deviceId!} ${fullName} ${username} ${password} ${email} start");
     var url = Uri(
       scheme: 'http',
       host: "103.134.154.22",
@@ -54,9 +57,10 @@ class AuthService {
           'fullName': fullName,
           'username': username,
           'password': password,
+          'email': email,
         }),
       );
-
+      print(response.statusCode);
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         print(response.body);
@@ -78,7 +82,9 @@ class AuthService {
         }
         var publicKey = jsonRes['key'];
         prefs.setString('publicKey', publicKey);
-        Get.off(const LoginPage());
+        // Get.off(const LoginPage());
+        Routes().goToPush('/Login');
+
       }
     } catch (e) {
       Fluttertoast.showToast(

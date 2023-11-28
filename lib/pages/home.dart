@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:labhci1/routes/routes.dart';
 import 'package:labhci1/pages/login.dart';
 import 'package:labhci1/utils/encryption.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -103,9 +104,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.off(const LoginPage());
-        },
+        onPressed: () => Routes().goToPush("/Login"),
         child: const Icon(Icons.exit_to_app),
       ),
     );
